@@ -276,8 +276,8 @@
 
     <div class="section-title"><span class="num">1</span> 基本資料</div>
 
-    <label>劇本名稱<span class="req">*</span><span class="hint">　（也會是檔名，例如「血染鐘樓」→ scenarios/血染鐘樓.json）</span></label>
-    <input type="text" id="f_name" placeholder="例如：血染鐘樓">
+    <label>劇本名稱<span class="req">*</span><span class="hint">　（也會是檔名，例如「太陽的TRPG」→ scenarios/太陽的TRPG.json）</span></label>
+    <input type="text" id="f_name" placeholder="例如：太陽的TRPG">
     <div class="warn-name" id="nameWarn"></div>
 
     <label>標語 Slogan<span class="hint">（選填，會顯示在劇本名稱正下方，當作一句話標語）</span></label>
@@ -286,7 +286,7 @@
     <div class="row2">
       <div>
         <label>作者</label>
-        <input type="text" id="f_author" placeholder="例如：無名跑團社">
+        <input type="text" id="f_author" placeholder="例如：太陽">
       </div>
       <div>
         <label>劇本網址<span class="hint">（選填）</span></label>
@@ -295,7 +295,7 @@
     </div>
 
     <label>別名／搜尋關鍵字<span class="hint">（選填，用逗號分隔，例如中文翻譯、簡稱）</span></label>
-    <input type="text" id="f_aliases" placeholder="例如：美術館, テロ, 沉默的恐怖分子">
+    <input type="text" id="f_aliases" placeholder="例如：太陽, TRPG">
 
     <div class="row2">
       <div>
@@ -372,7 +372,7 @@ function addNpcRow(prefill) {
   div.innerHTML = `
     <button type="button" class="btn-remove npc-remove" onclick="this.closest('.npc-block').remove(); renderJSON();">移除</button>
     <label>NPC 名稱<span class="hint">（不用自己打「# 」，產生 JSON 時會自動加上）</span></label>
-    <input type="text" class="npc-name" placeholder="例如：老鐘樓管理員">
+    <input type="text" class="npc-name" placeholder="例如：鄭宇碩">
     <label>NPC 簡介</label>
     <textarea class="npc-desc" rows="2" placeholder="簡短介紹這個 NPC..."></textarea>
     <label>NPC 圖片網址<span class="hint">（選填）</span></label>
