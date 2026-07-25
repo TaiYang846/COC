@@ -280,8 +280,8 @@
     <input type="text" id="f_name" placeholder="例如：血染鐘樓">
     <div class="warn-name" id="nameWarn"></div>
 
-    <label>標語 Slogan<span class="hint">（選填，會顯示在劇本名稱正下方）</span></label>
-    <input type="text" id="f_slogan" placeholder="例如：在謊言與真相之間，尋找唯一的出口">
+    <label>標語 Slogan<span class="hint">（選填，會顯示在劇本名稱正下方，當作一句話標語）</span></label>
+    <textarea id="f_slogan" rows="2" placeholder="例如：在謊言與真相之間，尋找唯一的出口"></textarea>
 
     <div class="row2">
       <div>
@@ -314,7 +314,7 @@
     <div class="section-title"><span class="num">2</span> 詳細內容</div>
 
     <label>背景<span class="hint">（選填，換行請直接按 Enter，會自動處理）</span></label>
-    <textarea id="f_background" rows="4" placeholder="世界觀、開場故事..."></textarea>
+    <textarea id="f_background" rows="2" placeholder="世界觀、開場故事..."></textarea>
 
     <label>概要<span class="hint">（建議填寫，會顯示在「背景」下方的獨立欄位）</span></label>
     <textarea id="f_summary" rows="4" placeholder="劇情簡介..."></textarea>
@@ -346,6 +346,7 @@
     <div class="preview-head">
       <div class="filename">檔名：scenarios/<strong id="filenamePreview">劇本名稱</strong>.json</div>
       <div class="actions">
+        <button class="btn-secondary" id="resetBtn" type="button">🗑️ 清空全部</button>
         <button class="btn-secondary" id="downloadBtn" type="button">下載 .json</button>
         <button class="btn-primary" id="copyBtn" type="button">複製 JSON</button>
         <span id="copyStatus">已複製！</span>
@@ -370,7 +371,7 @@ function addNpcRow(prefill) {
   div.dataset.npcId = id;
   div.innerHTML = `
     <button type="button" class="btn-remove npc-remove" onclick="this.closest('.npc-block').remove(); renderJSON();">移除</button>
-    <label>NPC 名稱</label>
+    <label>NPC 名稱<span class="hint">（不用自己打「# 」，產生 JSON 時會自動加上）</span></label>
     <input type="text" class="npc-name" placeholder="例如：老鐘樓管理員">
     <label>NPC 簡介</label>
     <textarea class="npc-desc" rows="2" placeholder="簡短介紹這個 NPC..."></textarea>
@@ -421,8 +422,11 @@ function buildScenarioObject() {
 
   const npcs = {};
   npcContainer.querySelectorAll('.npc-block').forEach(block => {
-    const nName = block.querySelector('.npc-name').value.trim();
+    let nName = block.querySelector('.npc-name').value.trim();
     if (!nName) return;
+    if (!nName.startsWith('# ')) {
+      nName = '# ' + nName;
+    }
     npcs[nName] = {
       description: block.querySelector('.npc-desc').value.trim(),
       image: block.querySelector('.npc-image').value.trim()
@@ -499,6 +503,26 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  const confirmed = window.confirm('確定要清空全部欄位嗎？目前填的內容會全部消失，這個動作沒辦法復原喔！');
+  if (!confirmed) return;
+
+  // 一般文字欄位跟 textarea 全部清空
+  document.querySelectorAll(
+    '#f_name, #f_author, #f_slogan, #f_url, #f_aliases, #f_players_min, #f_players_max, ' +
+    '#f_image, #f_background, #f_summary, #f_public_ho, #f_other, #f_ho_url'
+  ).forEach(el => el.value = '');
+
+  // 注意事項預設值是「無」，清空後補回去，跟第一次打開網頁時一致
+  document.getElementById('f_warning').value = '無';
+
+  // NPC 全部移除，重新放一個空白的
+  npcContainer.innerHTML = '';
+  addNpcRow();
+
+  renderJSON();
 });
 
 // 預設先放一個空白 NPC 欄位方便示範
