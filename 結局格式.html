@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>END CREDITS 產生器</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Courier+Prime&display=swap');
+
+  :root{
+    --ink:#1c231d;
+    --cover:#20301f;
+    --cover-deep:#152016;
+    --brass:#c8a24a;
+    --brass-dim:#8a7136;
+    --parchment:#f4ecd8;
+    --parchment-dim:#e6d9b8;
+    --candle:#e8b45a;
+    --line:#3c4a35;
+    --card-bg:linear-gradient(180deg, rgba(244,236,216,0.03), rgba(244,236,216,0.015));
+    --input-bg:rgba(0,0,0,0.22);
+    --output-bg:#0f1610;
+    --output-fg:#e9dfc4;
+    --bg-glow-1:rgba(200,162,74,0.10);
+    --bg-glow-2:rgba(232,180,90,0.06);
+  }
+  body.light{
+    --ink:#4a4560;
+    --cover:#EFEFF1;
+    --cover-deep:#E6E6EC;
+    --brass:#8f89b8;
+    --brass-dim:#CCDBE2;
+    --parchment:#4a4560;
+    --parchment-dim:#7b7690;
+    --candle:#C9CBE0;
+    --line:#CCDBE2;
+    --card-bg:linear-gradient(180deg, rgba(236,212,212,0.28), rgba(204,219,226,0.22));
+    --input-bg:rgba(255,255,255,0.7);
+    --output-bg:#ffffff;
+    --output-fg:#4a4560;
+    --bg-glow-1:rgba(236,212,212,0.35);
+    --bg-glow-2:rgba(204,219,226,0.35);
+    --swatch-1:#ECD4D4;
+    --swatch-2:#CCDBE2;
+    --swatch-3:#C9CBE0;
+  }
+  body.light .form-col .card:nth-child(3n+1){ border-left:4px solid var(--swatch-1); }
+  body.light .form-col .card:nth-child(3n+2){ border-left:4px solid var(--swatch-2); }
+  body.light .form-col .card:nth-child(3n){ border-left:4px solid var(--swatch-3); }
+  body.light .copyBtn{
+    background:linear-gradient(180deg, #C9CBE0, #ADAFD1);
+    color:#37324a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, var(--bg-glow-1), transparent 45%),
+      radial-gradient(ellipse at 100% 10%, var(--bg-glow-2), transparent 40%),
+      var(--cover-deep);
+    color:var(--parchment);
+    font-family:'Noto Sans TC', sans-serif;
+    padding:0 0 60px;
+    transition:background 0.25s, color 0.25s;
+  }
+  #themeToggle{
+    position:fixed;
+    top:12px;
+    right:12px;
+    z-index:20;
+    background:var(--input-bg);
+    border:1px solid var(--brass-dim);
+    color:var(--brass);
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:12px;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    backdrop-filter:blur(4px);
+    transition:0.15s;
+  }
+  #themeToggle:hover{
+    background:rgba(200,162,74,0.15);
+  }
+  header{
+    padding:36px 20px 22px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(200,162,74,0.06), transparent);
+  }
+  header .eyebrow{
+    font-size:11px;
+    letter-spacing:0.35em;
+    color:var(--brass);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  header h1{
+    font-family:'Noto Serif TC', serif;
+    font-weight:900;
+    font-size:28px;
+    margin:0 0 8px;
+    letter-spacing:0.06em;
+    color:var(--parchment);
+    text-shadow:0 0 18px rgba(232,180,90,0.25);
+  }
+  header p{
+    margin:0;
+    font-size:13px;
+    color:var(--parchment-dim);
+    opacity:0.75;
+  }
+
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 16px;
+  }
+
+  .main-grid{
+    display:grid;
+    grid-template-columns:1fr 380px;
+    gap:20px;
+    align-items:start;
+  }
+  .form-col{
+    min-width:0;
+  }
+  .output-col{
+    position:sticky;
+    top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    min-width:0;
+  }
+  @media (max-width:900px){
+    .main-grid{
+      grid-template-columns:1fr;
+    }
+    .output-col{
+      position:static;
+    }
+  }
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:20px 18px;
+    margin-bottom:18px;
+    position:relative;
+  }
+  .card::before{
+    content:'';
+    position:absolute;
+    top:8px; left:8px; right:8px; bottom:8px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    pointer-events:none;
+  }
+  .card h2{
+    font-family:'Noto Serif TC', serif;
+    font-size:15px;
+    letter-spacing:0.12em;
+    color:var(--brass);
+    margin:0 0 16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h2::before{
+    content:'✦';
+    font-size:11px;
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    color:var(--parchment-dim);
+    margin-bottom:5px;
+    letter-spacing:0.03em;
+  }
+  input[type="text"]{
+    width:100%;
+    background:var(--input-bg);
+    border:1px solid var(--line);
+    color:var(--parchment);
+    padding:9px 10px;
+    border-radius:3px;
+    font-size:14px;
+    font-family:'Noto Sans TC', sans-serif;
+    margin-bottom:12px;
+  }
+  input[type="text"]:focus{
+    outline:none;
+    border-color:var(--brass-dim);
+    box-shadow:0 0 0 2px rgba(200,162,74,0.15);
+  }
+  .row2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .cast-row, .with-row, .bonus-row{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    gap:8px;
+    align-items:center;
+    margin-bottom:10px;
+  }
+  .with-row{
+    grid-template-columns:1fr auto;
+  }
+  .tag{
+    font-size:11px;
+    color:var(--brass-dim);
+    padding-top:9px;
+    grid-column:1 / -1;
+    letter-spacing:0.08em;
+  }
+  .removeBtn{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--parchment-dim);
+    width:32px;
+    height:32px;
+    border-radius:3px;
+    cursor:pointer;
+    font-size:14px;
+    line-height:1;
+    transition:0.15s;
+  }
+  .removeBtn:hover{
+    border-color:#a04a3f;
+    color:#e08c7d;
+  }
+  .addBtn{
+    background:none;
+    border:1px dashed var(--brass-dim);
+    color:var(--brass);
+    width:100%;
+    padding:9px;
+    border-radius:3px;
+    cursor:pointer;
+    font-size:13px;
+    letter-spacing:0.05em;
+    margin-top:2px;
+    transition:0.15s;
+  }
+  .addBtn:hover{
+    background:rgba(200,162,74,0.08);
+  }
+
+  .output-card{
+    background:var(--cover);
+    border:1px solid var(--brass-dim);
+    margin-bottom:0;
+  }
+  .output-card h2::before{content:'☾';}
+  textarea{
+    width:100%;
+    min-height:280px;
+    background:var(--output-bg);
+    color:var(--output-fg);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:14px;
+    font-family:'Courier Prime', 'Noto Sans Mono CJK TC', monospace;
+    font-size:12.5px;
+    line-height:1.7;
+    white-space:pre;
+    resize:vertical;
+  }
+  .copyBtn{
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    background:linear-gradient(180deg, var(--candle), var(--brass-dim));
+    border:none;
+    border-radius:3px;
+    color:#241a08;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.08em;
+    cursor:pointer;
+    transition:0.15s;
+  }
+  .copyBtn:active{
+    transform:translateY(1px);
+  }
+  .copyBtn.copied{
+    background:linear-gradient(180deg, #8fae7c, #5e7a4e);
+    color:#eafbe3;
+  }
+  .output-card textarea{
+    min-height:220px;
+  }
+  .hint{
+    font-size:11px;
+    color:var(--parchment-dim);
+    opacity:0.6;
+    margin-top:8px;
+    text-align:center;
+  }
+</style>
+</head>
+<body class="light">
+
+<button id="themeToggle" onclick="toggleTheme()" title="切換深色／淺色">☀️ 淺色</button>
+
+<header>
+  <div class="eyebrow">TRPG SESSION WRAP</div>
+  <h1>・END CREDITS 產生器・</h1>
+  <p>填好資料，自動排版成結團格式，PC 數量可自由增減</p>
+</header>
+
+<div class="wrap">
+<div class="main-grid">
+
+<div class="form-col">
+
+  <!-- 劇本資訊 -->
+  <div class="card">
+    <h2>劇本資訊</h2>
+    <label>劇本名稱（MOVIE TITLE）</label>
+    <input type="text" id="scriptName" placeholder="例：伽藍堂書店へようこそ" />
+    <label>KP / Director</label>
+    <input type="text" id="kpName" placeholder="例：太陽" />
+  </div>
+
+  <!-- 演員名單 -->
+  <div class="card">
+    <h2>CAST 演員名單</h2>
+    <div id="castRows"></div>
+    <button class="addBtn" onclick="addCastRow()">＋ 新增角色</button>
+  </div>
+
+  <!-- 拍攝時間 -->
+  <div class="card">
+    <h2>拍攝時間</h2>
+    <div class="row2">
+      <div>
+        <label>Crank in date（開始）</label>
+        <input type="text" id="crankIn" placeholder="例：2026/07/31" />
+      </div>
+      <div>
+        <label>Crank up date（結束）</label>
+        <input type="text" id="crankUp" placeholder="例：2026/07/31" />
+      </div>
+    </div>
+  </div>
+
+  <!-- WITH 特別出演 -->
+  <div class="card">
+    <h2>WITH 特別出演（選填）</h2>
+    <div id="withRows"></div>
+    <button class="addBtn" onclick="addWithRow()">＋ 新增特別出演</button>
+  </div>
+
+  <!-- 結局 -->
+  <div class="card">
+    <h2>結局</h2>
+    <div class="row2">
+      <div>
+        <label>結局類型</label>
+        <input type="text" id="endingType" placeholder="例：Destiny End" value="Destiny End" />
+      </div>
+      <div>
+        <label>結局符號</label>
+        <input type="text" id="endingSymbol" placeholder="例：✿" value="✿" />
+      </div>
+    </div>
+    <label>結局名稱</label>
+    <input type="text" id="endingName" placeholder="例：將祝福獻給你" />
+    <label>分隔符樣式（第一段用）</label>
+    <input type="text" id="dividerStyle" value="—　★彡・.·:*:·.☆　—" />
+  </div>
+
+  <!-- 第二段：體驗回饋卡 -->
+  <div class="card">
+    <h2>體驗回饋卡（第二段）</h2>
+    <label>內容列（左欄 ｜ 右欄，可自由填寫、增減）</label>
+    <div id="bonusRows"></div>
+    <button class="addBtn" onclick="addBonusRow()">＋ 新增內容列</button>
+  </div>
+
+</div>
+
+<div class="output-col">
+  <div class="card output-card">
+    <h2>輸出預覽・END CREDITS</h2>
+    <textarea id="outputText" readonly></textarea>
+    <button class="copyBtn" id="copyBtn" onclick="copyOutput('outputText','copyBtn')">複製 END CREDITS</button>
+    <div class="hint">內容會即時更新，複製後可直接貼到 Discord／群組</div>
+  </div>
+
+  <div class="card output-card">
+    <h2>輸出預覽・體驗回饋卡</h2>
+    <textarea id="outputBonus" readonly style="min-height:120px;"></textarea>
+    <button class="copyBtn" id="copyBonusBtn" onclick="copyOutput('outputBonus','copyBonusBtn')">複製體驗回饋卡</button>
+    <div class="hint">內容會即時更新，複製後可直接貼到 Discord／群組</div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+let castCount = 0;
+let withCount = 0;
+let bonusCount = 0;
+
+function addCastRow(pc = '', pl = '') {
+  castCount++;
+  const idx = castCount;
+  const container = document.getElementById('castRows');
+  const div = document.createElement('div');
+  div.className = 'cast-row';
+  div.dataset.id = idx;
+  div.innerHTML = `
+    <div>
+      <label>PC${idx}</label>
+      <input type="text" class="pcName" value="${escapeAttr(pc)}" placeholder="角色名稱" oninput="render()" />
+    </div>
+    <div>
+      <label>PL${idx}（ACTOR）</label>
+      <input type="text" class="plName" value="${escapeAttr(pl)}" placeholder="玩家名稱" oninput="render()" />
+    </div>
+    <button class="removeBtn" onclick="removeRow(this)" title="刪除">✕</button>
+  `;
+  container.appendChild(div);
+  renumberCast();
+  render();
+}
+
+function addWithRow(name = '') {
+  withCount++;
+  const container = document.getElementById('withRows');
+  const div = document.createElement('div');
+  div.className = 'with-row';
+  div.innerHTML = `
+    <input type="text" class="withName" value="${escapeAttr(name)}" placeholder="例：岸本 千里" oninput="render()" />
+    <button class="removeBtn" onclick="removeRow(this)" title="刪除">✕</button>
+  `;
+  container.appendChild(div);
+  render();
+}
+
+function addBonusRow(left = '', right = '') {
+  bonusCount++;
+  const container = document.getElementById('bonusRows');
+  const div = document.createElement('div');
+  div.className = 'bonus-row';
+  div.innerHTML = `
+    <input type="text" class="bonusLeft" value="${escapeAttr(left)}" placeholder="左欄（例：體驗伽藍堂書店）" oninput="render()" />
+    <input type="text" class="bonusRight" value="${escapeAttr(right)}" placeholder="右欄（例：克蘇魯神話+3）" oninput="render()" />
+    <button class="removeBtn" onclick="removeRow(this)" title="刪除">✕</button>
+  `;
+  container.appendChild(div);
+  render();
+}
+
+function removeRow(btn) {
+  const row = btn.closest('.cast-row, .with-row, .bonus-row');
+  const parentId = row.parentElement.id;
+  row.remove();
+  if (parentId === 'castRows') renumberCast();
+  render();
+}
+
+function renumberCast() {
+  const rows = document.querySelectorAll('#castRows .cast-row');
+  rows.forEach((row, i) => {
+    const n = i + 1;
+    row.querySelector('label:nth-of-type(1)').textContent = `PC${n}`;
+    row.querySelectorAll('label')[1].textContent = `PL${n}（ACTOR）`;
+  });
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+}
+
+function val(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function render() {
+  const scriptName = val('scriptName');
+  const kpName = val('kpName');
+  const crankIn = val('crankIn');
+  const crankUp = val('crankUp');
+  const endingType = val('endingType');
+  const endingSymbol = val('endingSymbol');
+  const endingName = val('endingName');
+  const dividerStyle = val('dividerStyle');
+
+  const castRows = [...document.querySelectorAll('#castRows .cast-row')].map(r => ({
+    pc: r.querySelector('.pcName').value.trim(),
+    pl: r.querySelector('.plName').value.trim()
+  }));
+  const withRows = [...document.querySelectorAll('#withRows .withName')]
+    .map(i => i.value.trim())
+    .filter(Boolean);
+  const bonusRows = [...document.querySelectorAll('#bonusRows .bonus-row')].map(r => ({
+    left: r.querySelector('.bonusLeft').value.trim(),
+    right: r.querySelector('.bonusRight').value.trim()
+  }));
+
+  let lines = [];
+  lines.push('・END CREDITS・');
+  lines.push('');
+  if (scriptName) lines.push(`MOVIE TITLE ${scriptName}`);
+  if (kpName) lines.push(`  Director ${kpName}`);
+  lines.push('');
+  lines.push('  [ CAST ]');
+  lines.push('');
+  castRows.forEach((row, i) => {
+    lines.push(`PC${i + 1} ♡${row.pc}`);
+    lines.push(`  ACTOR ${row.pl}`);
+    lines.push('');
+  });
+  if (crankIn || crankUp) {
+    if (crankIn) lines.push(`Crank in date ${crankIn}`);
+    if (crankUp) lines.push(`Crank up date ${crankUp}`);
+    lines.push('');
+  }
+  if (withRows.length) {
+    lines.push(`WITH ${withRows.join('、')}`);
+    lines.push('');
+  }
+  if (dividerStyle) {
+    lines.push(dividerStyle);
+    lines.push('');
+  }
+  if (endingType || endingName) {
+    lines.push(`${endingType} ${endingSymbol}「${endingName}」`);
+  }
+
+  document.getElementById('outputText').value = lines.join('\n');
+
+  // 體驗回饋卡（獨立輸出，內容完全自訂，不綁定結局／劇本名稱）
+  let bonusLines = [];
+  bonusLines.push('------------------------------ .✦');
+  bonusRows.forEach((row) => {
+    bonusLines.push(`   ${row.left}  |  ${row.right}`);
+  });
+  bonusLines.push('✦. ------------------------------');
+
+  document.getElementById('outputBonus').value = bonusLines.join('\n');
+}
+
+function copyOutput(textareaId, btnId) {
+  const ta = document.getElementById(textareaId);
+  ta.select();
+  ta.setSelectionRange(0, 999999);
+  const btn = document.getElementById(btnId);
+  const originalText = btn.textContent;
+  const done = () => {
+    btn.textContent = '已複製 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.classList.remove('copied');
+    }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(done).catch(() => {
+      document.execCommand('copy');
+      done();
+    });
+  } else {
+    document.execCommand('copy');
+    done();
+  }
+}
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('themeToggle').textContent = isLight ? '☀️ 淺色' : '🌙 深色';
+}
+
+// 初始化：預設兩位角色 + 一列加成
+addCastRow();
+addCastRow();
+addBonusRow('Destiny End', '1d10的SAN回復');
+addBonusRow('體驗伽藍堂書店', '克蘇魯神話+3');
+render();
+</script>
+
+</body>
+</html>
