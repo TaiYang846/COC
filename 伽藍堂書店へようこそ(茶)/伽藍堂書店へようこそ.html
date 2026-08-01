@@ -1,6 +1,18 @@
 <!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>伽藍堂書店へようこそ(茶)</title><style>
+:root{
+  --bg:#313338; --bg2:#2b2d31; --bg3:#2e3035;
+  --border:#3a3c43; --border2:#4e505a; --border-strong:#1e1f22;
+  --text:#dbdee1; --text-bright:#f2f3f5; --text-muted:#949ba4; --text-soft:#c9cdd3;
+  --mention-bg:#3c4270; --mention-text:#c9cfe8;
+}
+html.light{
+  --bg:#ffffff; --bg2:#f2f3f5; --bg3:#e9eaec;
+  --border:#e3e5e8; --border2:#d1d5da; --border-strong:#d1d3d6;
+  --text:#2e3338; --text-bright:#060607; --text-muted:#5c5e66; --text-soft:#4a4d54;
+  --mention-bg:#dee0fc; --mention-text:#3c4270;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#313338;color:#dbdee1;font-family:"Segoe UI","Noto Sans TC",sans-serif;font-size:15px;line-height:1.5}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI","Noto Sans TC",sans-serif;font-size:15px;line-height:1.5}
 .hdr{background:#2b2d31;padding:14px 24px;border-bottom:1px solid #1e1f22;position:sticky;top:0;z-index:10}
 .hdr h1{font-size:18px;color:#f2f3f5}
 .hdr small{color:#949ba4;font-size:12px}
@@ -43,20 +55,20 @@ body{background:#313338;color:#dbdee1;font-family:"Segoe UI","Noto Sans TC",sans
 .emb-f{color:#949ba4;font-size:12px;margin-top:8px;display:flex;align-items:center;gap:6px}
 .poll,.comps{border:1px solid #3a3c43;background:#2b2d31;border-radius:6px;padding:8px 10px;margin-top:6px;max-width:520px}
 .poll-q{font-weight:600;margin-bottom:6px}
-.poll-a{display:flex;justify-content:space-between;gap:8px;padding:3px 0;color:#dbdee1}
+.poll-a{display:flex;justify-content:space-between;gap:8px;padding:3px 0;color:var(--text)}
 .poll-meta{color:#949ba4;font-size:12px;margin-top:6px}
 .stickers,.comp-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .sticker{background:#2b2d31;border:1px solid #3a3c43;border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:4px;align-items:center;max-width:160px}
 .sticker img{max-width:140px;max-height:140px;object-fit:contain}
 .sticker span{font-size:12px;color:#949ba4}
-.comp-btn,.comp-select,.comp-file{border:1px solid #4e505a;background:#313338;color:#dbdee1;border-radius:4px;padding:4px 8px;font-size:13px}
+.comp-btn,.comp-select,.comp-file{border:1px solid #4e505a;background:var(--bg);color:var(--text);border-radius:4px;padding:4px 8px;font-size:13px}
 .comp-btn.disabled,.comp-select.disabled{opacity:.55}
 .comp-text{white-space:pre-wrap;font-size:14px;margin:3px 0}
 .comp-media img{max-width:min(400px,100%);max-height:280px;border-radius:4px;object-fit:contain;margin-top:4px}
 .rxs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
 .rx{background:#2b2d31;border:1px solid #3a3c43;border-radius:8px;padding:2px 8px;font-size:13px}
 .emoji{width:1.375em;height:1.375em;vertical-align:-0.3em;object-fit:contain}
-.qt{border-left:3px solid #4e505a;padding-left:8px;margin:2px 0;display:block;color:#dbdee1}
+.qt{border-left:3px solid #4e505a;padding-left:8px;margin:2px 0;display:block;color:var(--text)}
 .spoiler{background:#2e3035;color:transparent;border-radius:3px;padding:0 2px;cursor:pointer;transition:color .1s}
 .spoiler.revealed{color:inherit}
 .mention{background:#3c4270;color:#c9cfe8;border-radius:3px;padding:0 2px;font-weight:500}
@@ -76,6 +88,7 @@ pre code{background:none;padding:0;white-space:inherit;overflow-wrap:inherit;wor
 #lb.open{display:flex}
 #lb img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:6px}
 </style></head><body><div class="hdr"><h1>茶︙伽藍堂書店へようこそ</h1></div>
+<button id="theme-toggle">🌙 夜間模式</button>
 <div class="msg"><img class="av" src="images/avatar_001_a89dbadbeb.png" alt=""><div class="bd"><div class="row"><span class="nm">KP陽</span><span class="ts">2026-05-05 11:41</span></div><div class="dc-h2">【西曆2025年5月下旬】</div><br>初夏時節。春天的色彩尚留一絲餘韻，柔和的藍風輕輕拂過街角。<br><br>自從「那件事情」之後，已經過去了三年。<br>你說服了母親領養胡麻回家，雖然沒有很習慣多了一個妹妹，但你們同時經歷了「那件事情」，又同時被岸本千里拯救，所以你們相處的還算愉快……吧。<br><br>今天，天空萬里無雲，是一個完美的晴日。你為了幫忙家裡補充生活用品，獨自外出。然而在路途中，就像打呵欠時不小心掉下的眼淚般，天空忽然落下細微的雨滴聲。<br>不久後，天色劇變——豆大的雨珠傾瀉而下，如瀑布般密集。<br><br>那是一場驚人的驟雨。<br>視野瞬間被白霧籠罩，滂沱的雨聲切斷了周遭一切的氣息與聲音。</div></div></div>
 <div class="msg"><img class="av" src="images/avatar_002_3a196db08d.png" alt=""><div class="bd"><div class="row"><span class="nm">菊石 蒼汰</span><span class="ts">2026-05-06 01:05</span></div><div class="tx">「——！？」<br><br>菊石才剛伸出手，想確認天上是否真的落下了雨滴，下一瞬，卻像是有一桶水直接傾倒在他的手上……不，是全身上下。<br><br>他想都還來不及多想，便已經先將手中原本還提著的、要買給胡麻的牛奶巧克力蛋糕直接護在懷裡，急忙尋找路邊有沒有能夠暫且躲雨的地方。其他東西淋濕還沒什麼大問題，但要是蛋糕濕掉可就難辦了。</div></div></div>
 <div class="msg"><img class="av" src="images/avatar_001_a89dbadbeb.png" alt=""><div class="bd"><div class="row"><span class="nm">KP陽</span><span class="ts">2026-05-06 09:25</span></div><div class="tx">面對這場突如其來的暴雨，你一邊護著懷中的牛奶巧克力蛋糕，一邊尋找著能夠暫時避雨的地方。<br>接著，你找到一處剛好能遮蔽身體的屋簷。<br><br>進到屋簷下，你發現這裡是一棟舊大樓的一角。<br>這棟建築已經廢棄，完全感受不到任何人類的氣息。玄關的玻璃門破碎不堪、被棄置著，牆上有稚拙的塗鴉，地上散落著噴漆罐——<br><br>整體給人一種「廢墟」的印象。<br><br>雖然稱不上極度詭異，但從破損程度來看，這裡被放置的時間應該還不算太長。若不是為了避雨，大概誰也不想久待於此。<br><br><span class="qt">請做【INT】或【神祕學】判定</span></div></div></div>
@@ -612,4 +625,19 @@ pre code{background:none;padding:0;white-space:inherit;overflow-wrap:inherit;wor
 <div class="msg"><img class="av" src="images/avatar_007_6f133f2153.png" alt=""><div class="bd"><div class="row"><span class="nm">尼亞姆・尼亞爾・尼亞姆納哈爾七世</span><span class="ts">2026-07-30 00:08</span></div><div class="tx">牠無奈地歎了口氣，照例吐出那句熟悉的話語：<br>「——歡迎光臨伽藍堂書店。」</div></div></div>
 <div class="msg"><img class="av" src="images/avatar_010_366fa056e5.png" alt=""><div class="bd"><div class="row"><span class="nm">.☘ ݁˖</span><span class="ts">2026-07-30 00:08</span></div><div class="tx"><br>────────────────────────────── .✦<br><br>　　    Destiny End　❘　1d10的SAN回復<br>　體驗伽藍堂書店　❘　克蘇魯神話+3<br><br>✦. ──────────────────────────────<br><br></div></div></div>
 </script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"d8376039e8a844bc95f45eb0ee2d8fef","r":1}' crossorigin="anonymous"></script>
+<script>
+var btn = document.getElementById('theme-toggle');
+var html = document.documentElement;
+
+// 讀取上次選的模式,自動套用
+var saved = localStorage.getItem('chatTheme');
+if (saved === 'light') html.classList.add('light');
+
+btn.addEventListener('click', function(){
+  html.classList.toggle('light');
+  var isLight = html.classList.contains('light');
+  localStorage.setItem('chatTheme', isLight ? 'light' : 'dark');
+  btn.textContent = isLight ? '☀️ 日間模式' : '🌙 夜間模式';
+});
+</script>
 </body></html>
